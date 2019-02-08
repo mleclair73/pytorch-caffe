@@ -31,7 +31,7 @@ def parse_prototxt(protofile):
                 key, value = line.split(':')
                 key = key.strip()
                 value = value.strip().strip('"')
-                if block.has_key(key):
+                if key in block:
                     if type(block[key]) == list:
                         block[key].append(value)
                     else:
@@ -60,7 +60,7 @@ def parse_prototxt(protofile):
             key, value = line.split(':')
             key = key.strip()
             value = value.strip().strip('"')
-            if props.has_key(key):
+            if key in props:
                if type(props[key]) == list:
                    props[key].append(value)
                else:
@@ -156,9 +156,9 @@ def save_prototxt(net_info, protofile, region=True):
         
     props = net_info['props']
     print('name: \"%s\"' % props['name'], file=fp)
-    if props.has_key('input'):
+    if 'input' in props:
         print('input: \"%s\"' % props['input'], file=fp)
-    if props.has_key('input_dim'):
+    if 'input_dim' in props:
         print('input_dim: %s' % props['input_dim'][0], file=fp)
         print('input_dim: %s' % props['input_dim'][1], file=fp)
         print('input_dim: %s' % props['input_dim'][2], file=fp)
@@ -182,7 +182,7 @@ def parse_solver(solverfile):
         items = line.split(':')
         key = items[0].strip()
         value = items[1].strip().strip('"')
-        if not solver.has_key(key):
+        if not key in solver:
             solver[key] = value
         elif not type(solver[key]) == list:
             solver[key] = [solver[key], value]
