@@ -1,10 +1,11 @@
 # 2017.12.16 by xiaohang
+import sys
 from collections import OrderedDict
 import caffe.proto.caffe_pb2 as caffe_pb2
 
 def parse_caffemodel(caffemodel):
     model = caffe_pb2.NetParameter()
-    print 'Loading caffemodel: ', caffemodel
+    print('Loading caffemodel: ', caffemodel)
     with open(caffemodel, 'rb') as fp:
         model.ParseFromString(fp.read())
 
@@ -25,7 +26,7 @@ def parse_prototxt(protofile):
         while line != '}':
             ltype = line_type(line)
             if ltype == 0: # key: value
-                #print line
+                #print(line)
                 line = line.split('#')[0]
                 key, value = line.split(':')
                 key = key.strip()
@@ -142,27 +143,27 @@ def save_prototxt(net_info, protofile, region=True):
 
     def print_block(block_info, prefix, indent):
         blanks = ''.join([' ']*indent)
-        print >>fp, '%s%s {' % (blanks, prefix)
+        print('%s%s {' % (blanks, prefix), file=fp)
         for key,value in block_info.items():
             if type(value) == OrderedDict:
                 print_block(value, key, indent+4)
             elif type(value) == list:
                 for v in value:
-                    print >> fp, '%s    %s: %s' % (blanks, key, format_value(v))
+                    print('%s    %s: %s' % (blanks, key, format_value(v)), file=fp)
             else:
-                print >> fp, '%s    %s: %s' % (blanks, key, format_value(value))
-        print >> fp, '%s}' % blanks
+                print('%s    %s: %s' % (blanks, key, format_value(value)), file=fp)
+        print('%s}' % blanks, file=fp)
         
     props = net_info['props']
-    print >> fp, 'name: \"%s\"' % props['name']
+    print('name: \"%s\"' % props['name'], file=fp)
     if props.has_key('input'):
-        print >> fp, 'input: \"%s\"' % props['input']
+        print('input: \"%s\"' % props['input'], file=fp)
     if props.has_key('input_dim'):
-        print >> fp, 'input_dim: %s' % props['input_dim'][0]
-        print >> fp, 'input_dim: %s' % props['input_dim'][1]
-        print >> fp, 'input_dim: %s' % props['input_dim'][2]
-        print >> fp, 'input_dim: %s' % props['input_dim'][3]
-    print >> fp, ''
+        print('input_dim: %s' % props['input_dim'][0], file=fp)
+        print('input_dim: %s' % props['input_dim'][1], file=fp)
+        print('input_dim: %s' % props['input_dim'][2], file=fp)
+        print('input_dim: %s' % props['input_dim'][3], file=fp)
+    print('', file=fp)
     layers = net_info['layers']
     for layer in layers:
         if layer['type'] != 'Region' or region == True:
