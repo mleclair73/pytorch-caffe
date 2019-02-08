@@ -1002,9 +1002,9 @@ class CaffeNet(nn.Module):
                 i = i + 1
             elif ltype == 'Interp':
                 size = int(layer['interp_param'].get('shrink_factor') or 0)
-                if not size is None:
+                if not size:
                     size = int(layer['interp_param'].get('zoom_factor') or 0)
-                if not size is None:
+                if not size:
                     size = (int(layer['interp_param']['height']),
                             int(layer['interp_param']['width']))
                     blob_channels[tname] = input_channels
