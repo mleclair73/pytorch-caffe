@@ -1000,7 +1000,16 @@ class CaffeNet(nn.Module):
                 if not size:
                     size = (int(layer['interp_param']['height']),
                             int(layer['interp_param']['width']))
+                    blob_channels[tname] = input_channels
+                    blob_width[tname] = size[1]
+                    blob_height[tname] = size[0]
+                else:
+                    blob_channels[tname] = input_channels
+                    blob_width[tname] = int(math.floor(input_width * size))
+                    blob_height[tname] = int(math.floor(input_height * size))
+
                 models[lname] = Interpolate(size, mode='bilinear', align_corners=True)
+                i = i + 1
             else:
                 print('create_network: unknown type #%s#' % ltype)
                 i = i + 1
