@@ -769,6 +769,9 @@ class CaffeNet(nn.Module):
                 blob_height[tname] = blob_height[bname]
                 i = i + 1
             elif ltype == 'Pooling':
+                padding = 0
+                if 'pad' in layer['pooling_param']:
+                    padding = int(layer['pooling_param']['pad'])               
                 param = layer['pooling_param']
                 if 'kernel_size' in param and 'stride' in param:
                     kernel_size = int(param['kernel_size'])
@@ -780,17 +783,12 @@ class CaffeNet(nn.Module):
                     stride = (param['stride_h'], param['stride_w'])
                     blob_width[tname] = int(math.ceil((blob_width[bname] + 2*padding - kernel_size[1])/float(stride[1]))) + 1
                     blob_height[tname] = int(math.ceil((blob_height[bname] + 2*padding - kernel_size[0])/float(stride[0]))) + 1
-                padding = 0
-                if 'pad' in layer['pooling_param']:
-                    padding = int(layer['pooling_param']['pad'])
                 pool_type = layer['pooling_param']['pool']
                 if pool_type == 'MAX':
                     models[lname] = nn.MaxPool2d(kernel_size, stride, padding=padding, ceil_mode=True)
                 elif pool_type == 'AVE':
                     models[lname] = nn.AvgPool2d(kernel_size, stride, padding=padding, ceil_mode=True)
 
-                # blob_width[tname] = int(math.ceil((blob_width[bname] + 2*padding - kernel_size)/float(stride))) + 1
-                # blob_height[tname] = int(math.ceil((blob_height[bname] + 2*padding - kernel_size)/float(stride))) + 1
                 blob_channels[tname] = blob_channels[bname]
                 i = i + 1
             elif ltype == 'Eltwise':
