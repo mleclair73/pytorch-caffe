@@ -779,8 +779,8 @@ class CaffeNet(nn.Module):
                     blob_width[tname] = int(math.ceil((blob_width[bname] + 2*padding - kernel_size)/float(stride))) + 1
                     blob_height[tname] = int(math.ceil((blob_height[bname] + 2*padding - kernel_size)/float(stride))) + 1
                 else:
-                    kernel_size = (param['kernel_h'], param['kernel_w'])
-                    stride = (param['stride_h'], param['stride_w'])
+                    kernel_size = (int(param['kernel_h']), int(param['kernel_w']))
+                    stride = (int(param['stride_h']), int(param['stride_w']))
                     blob_width[tname] = int(math.ceil((blob_width[bname] + 2*padding - kernel_size[1])/float(stride[1]))) + 1
                     blob_height[tname] = int(math.ceil((blob_height[bname] + 2*padding - kernel_size[0])/float(stride[0]))) + 1
                 pool_type = layer['pooling_param']['pool']
