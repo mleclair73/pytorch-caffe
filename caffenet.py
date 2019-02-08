@@ -373,6 +373,17 @@ class PriorBox(nn.Module):
         else:
             return Variable(output)
 
+class Interpolate(nn.Module):
+    def __init__(self, size, mode, align_corners=True):
+        super(Interpolate, self).__init__()
+        self.interp = nn.functional.interpolate
+        self.size = size
+        self.mode = mode
+        
+    def forward(self, x):
+        x = self.interp(x, size=self.size, mode=self.mode, align_corners=align_corners)
+        return x
+
 class CaffeNet(nn.Module):
     def __init__(self, protofile, width=None, height=None, channels=None, omit_data_layer=False, phase='TRAIN'):
         super(CaffeNet, self).__init__()
@@ -982,6 +993,14 @@ class CaffeNet(nn.Module):
                 blob_width[tname] = 1
                 blob_height[tname] = 1
                 i = i + 1
+            elif ltype == 'Interp':
+                size = int(layer['interp_param']['shrink_factor'])
+                if not size:
+                    size = int(layer['interp_param']['zoom_factor'])
+                if not size:
+                    size = (int(layer['interp_param']['height']),
+                            int(layer['interp_param']['width']))
+                models[lname] = Interpolate(size, mode='bilinear', align_corners=True)
             else:
                 print('create_network: unknown type #%s#' % ltype)
                 i = i + 1
