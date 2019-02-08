@@ -769,8 +769,13 @@ class CaffeNet(nn.Module):
                 blob_height[tname] = blob_height[bname]
                 i = i + 1
             elif ltype == 'Pooling':
-                kernel_size = int(layer['pooling_param']['kernel_size'])
-                stride = int(layer['pooling_param']['stride'])
+                param = layer['pooling_param']
+                if 'kernel_size' in param and 'stride' in param:
+                    kernel_size = int(param['kernel_size'])
+                    stride = int(param['stride'])
+                else:
+                    kernel_size = (param['kernel_h'], param['kernel_w'])
+                    stride = (param['stride_h'], param['stride_w'])
                 padding = 0
                 if 'pad' in layer['pooling_param']:
                     padding = int(layer['pooling_param']['pad'])
