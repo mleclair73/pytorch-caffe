@@ -1,4 +1,4 @@
-# 2017.12.16 by xiaohang
+# 2017.12.16 by xiaohang 
 import sys
 from collections import OrderedDict
 import caffe.proto.caffe_pb2 as caffe_pb2
