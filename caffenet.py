@@ -740,7 +740,7 @@ class CaffeNet(nn.Module):
                 blob_width[tname] = (blob_width[bname] + 2*pad - kernel_size)/stride + 1
                 blob_height[tname] = (blob_height[bname] + 2*pad - kernel_size)/stride + 1
                 i = i + 1
-            elif ltype == 'BatchNorm':
+            elif ltype == 'BatchNorm' or ltype == "BN":
                 momentum = 0.9
                 if 'batch_norm_param' in layer and 'moving_average_fraction' in layer['batch_norm_param']:
                     momentum = float(layer['batch_norm_param']['moving_average_fraction'])
