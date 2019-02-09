@@ -629,7 +629,7 @@ class CaffeNet(nn.Module):
                     self.models[lname].bias.data.copy_(torch.from_numpy(np.array(lmap[lname].blobs[1].data)))
                     #print("convlution %s has bias" % lname)
                 i = i + 1
-            elif ltype == 'BatchNorm' or lr == 'BN':
+            elif ltype == 'BatchNorm' or ltype == 'BN':
                 print('load weights %s' % lname)
                 self.models[lname].running_mean.copy_(torch.from_numpy(np.array(lmap[lname].blobs[0].data) / lmap[lname].blobs[2].data[0]))
                 self.models[lname].running_var.copy_(torch.from_numpy(np.array(lmap[lname].blobs[1].data) / lmap[lname].blobs[2].data[0]))
