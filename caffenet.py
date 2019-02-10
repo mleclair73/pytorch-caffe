@@ -1016,7 +1016,7 @@ class CaffeNet(nn.Module):
                     blob_height[tname] = int(math.floor(input_height * scale))
                 
 
-                if 'height' in params and 'weight' in params:
+                if 'height' in params and 'width' in params:
                     size = (int(layer['interp_param']['height']),
                             int(layer['interp_param']['width']))
                     print("SET BLOB")
