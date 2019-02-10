@@ -1010,9 +1010,10 @@ class CaffeNet(nn.Module):
                     scale = int(params['shrink_factor'])
                 if 'zoom_factor' in params:
                     scale = int(params['zoom_factor'])
+                if scale:
+                    blob_width[tname] = int(math.floor(input_width * scale))
+                    blob_height[tname] = int(math.floor(input_height * scale))
                 
-                blob_width[tname] = int(math.floor(input_width * scale))
-                blob_height[tname] = int(math.floor(input_height * scale))
 
                 if 'height' in params and 'weight' in params:
                     size = (int(layer['interp_param']['height']),
