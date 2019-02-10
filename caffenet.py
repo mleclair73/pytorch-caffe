@@ -383,7 +383,7 @@ class Interpolate(nn.Module):
         self.align_corners = align_corners
 
     def forward(self, x):
-        x = self.interp(x, size=self.size, scale=self.scale, mode=self.mode, align_corners=self.align_corners)
+        x = self.interp(x, size=self.size, scale_factor=self.scale, mode=self.mode, align_corners=self.align_corners)
         return x
 
 class CaffeNet(nn.Module):
@@ -1011,7 +1011,6 @@ class CaffeNet(nn.Module):
                 if 'zoom_factor' in params:
                     scale = int(params['zoom_factor'])
                 if not scale is None:
-                    print("SET BLOB")
                     blob_width[tname] = int(math.floor(input_width * scale))
                     blob_height[tname] = int(math.floor(input_height * scale))
                 
@@ -1019,7 +1018,6 @@ class CaffeNet(nn.Module):
                 if 'height' in params and 'width' in params:
                     size = (int(layer['interp_param']['height']),
                             int(layer['interp_param']['width']))
-                    print("SET BLOB")
                     blob_width[tname] = size[1]
                     blob_height[tname] = size[0]
                     
