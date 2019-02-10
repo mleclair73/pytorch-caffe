@@ -1003,6 +1003,8 @@ class CaffeNet(nn.Module):
                 blob_height[tname] = 1
                 i = i + 1
             elif ltype == 'Interp':
+                size = None
+                scale = None
                 params = layer['interp_param']
                 if 'shrink_factor' in params:
                     scale = int(params['shrink_factor'])
