@@ -1023,7 +1023,7 @@ class CaffeNet(nn.Module):
 
                 blob_channels[tname] = input_channels
 
-                models[lname] = Interpolate(size=size, shape=shape, mode='bilinear', align_corners=True)
+                models[lname] = Interpolate(size=size, scale=scale, mode='bilinear', align_corners=True)
                 i = i + 1
             else:
                 print('create_network: unknown type #%s#' % ltype)
