@@ -78,6 +78,7 @@ class Eltwise(nn.Module):
         return 'Eltwise %s' % self.operation
 
     def forward(self, *inputs):
+        inputs = list(inputs)
         if self.operation == '+' or self.operation == 'SUM':
             x = inputs.pop()
             for i in range(1,len(inputs)):
