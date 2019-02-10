@@ -79,9 +79,9 @@ class Eltwise(nn.Module):
 
     def forward(self, *inputs):
         if self.operation == '+' or self.operation == 'SUM':
-            x = inputs[0]
+            x = inputs.pop()
             for i in range(1,len(inputs)):
-                x = x + inputs[i]
+                x += inputs.pop()
         elif self.operation == '*' or self.operation == 'MUL':
             x = inputs[0]
             for i in range(1,len(inputs)):
