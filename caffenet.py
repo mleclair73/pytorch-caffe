@@ -374,15 +374,16 @@ class PriorBox(nn.Module):
             return Variable(output)
 
 class Interpolate(nn.Module):
-    def __init__(self, size, mode, align_corners=True):
+    def __init__(self, mode, size=None, scale=None, align_corners=True):
         super(Interpolate, self).__init__()
         self.interp = nn.functional.interpolate
         self.size = size
+        self.scale = scale
         self.mode = mode
         self.align_corners = align_corners
-        
+
     def forward(self, x):
-        x = self.interp(x, size=self.size, mode=self.mode, align_corners=self.align_corners)
+        x = self.interp(x, size=self.size, scale=self.scale, mode=self.mode, align_corners=self.align_corners)
         return x
 
 class CaffeNet(nn.Module):
@@ -1002,21 +1003,25 @@ class CaffeNet(nn.Module):
                 blob_height[tname] = 1
                 i = i + 1
             elif ltype == 'Interp':
-                size = int(layer['interp_param'].get('shrink_factor') or 0)
-                if not size:
-                    size = int(layer['interp_param'].get('zoom_factor') or 0)
-                if not size:
+                params = layer['interp_param']
+                if 'shrink_factor' in params:
+                    scale = int(params['shrink_factor'])
+                if 'zoom_factor' in params:
+                    scale = int(params['zoom_factor'])
+                
+                blob_width[tname] = int(math.floor(input_width * scale))
+                blob_height[tname] = int(math.floor(input_height * scale))
+
+                if 'height' in params and 'weight' in params:
                     size = (int(layer['interp_param']['height']),
                             int(layer['interp_param']['width']))
-                    blob_channels[tname] = input_channels
                     blob_width[tname] = size[1]
                     blob_height[tname] = size[0]
-                else:
-                    blob_channels[tname] = input_channels
-                    blob_width[tname] = int(math.floor(input_width * size))
-                    blob_height[tname] = int(math.floor(input_height * size))
+                    
 
-                models[lname] = Interpolate(size, mode='bilinear', align_corners=True)
+                blob_channels[tname] = input_channels
+
+                models[lname] = Interpolate(size=size, shape=shape, mode='bilinear', align_corners=True)
                 i = i + 1
             else:
                 print('create_network: unknown type #%s#' % ltype)
