@@ -108,12 +108,12 @@ class Scale(nn.Module):
         return 'Scale(channels = %d)' % self.channels
 
     def forward(self, x):
-        nB = x.size(0)
-        nC = x.size(1)
-        nH = x.size(2)
-        nW = x.size(3)
-        x = x * self.weight.view(1, nC, 1, 1).expand(nB, nC, nH, nW) + \
-            self.bias.view(1, nC, 1, 1).expand(nB, nC, nH, nW)
+        # nB = x.size(0)
+        # nC = x.size(1)
+        # nH = x.size(2)
+        # nW = x.size(3)
+        # x = x * self.weight.view(1, nC, 1, 1).expand(nB, nC, nH, nW) + \
+        #     self.bias.view(1, nC, 1, 1).expand(nB, nC, nH, nW)
         return x
 
 class Crop(nn.Module):
@@ -450,6 +450,7 @@ class CaffeNet(nn.Module):
         layer_num = len(layers)
         i = 0
         self.output_loss = None
+        import pdb; pdb.set_trace()
         while i < layer_num:
             layer = layers[i]
             lname = layer['name']
