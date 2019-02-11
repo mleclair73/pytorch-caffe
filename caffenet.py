@@ -537,7 +537,8 @@ class CaffeNet(nn.Module):
         if self.has_mean:
             print('mean_file', self.mean_file)
             mean_blob = caffe_pb2.BlobProto()
-            mean_blob.ParseFromString(open(self.mean_file, 'rb').read())
+            with open(self.mean_file, 'rb') as f:
+                mean_blob.ParseFromString(f.read())
 
             if 'input_shape' in self.net_info['props']:
                 channels = int(self.net_info['props']['input_shape']['dim'][1])
