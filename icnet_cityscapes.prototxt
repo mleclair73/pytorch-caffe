@@ -7,17 +7,14 @@ input_dim: 2049
 
 layer {
   name: "data_sub1"
-  type: "Interp"
+  type: "Scale"
   bottom: "data"
   top: "data_sub1"
-  interp_param {
-    shrink_factor: 1
-  }
 }
 layer {
   name: "data_sub2"
   type: "Interp"
-  bottom: "data"
+  bottom: "data_sub1"
   top: "data_sub2"
   interp_param {
     shrink_factor: 2
