@@ -971,7 +971,7 @@ class CaffeNet(nn.Module):
                 scale = None
                 params = layer['interp_param']
                 if 'shrink_factor' in params:
-                    scale = int(params['shrink_factor'])
+                    scale = 1 / max(int(params['shrink_factor']), 1)
                 if 'zoom_factor' in params:
                     scale = int(params['zoom_factor'])
                 if not scale is None:
