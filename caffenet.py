@@ -450,7 +450,6 @@ class CaffeNet(nn.Module):
         layer_num = len(layers)
         i = 0
         self.output_loss = None
-        import pdb; pdb.set_trace()
         while i < layer_num:
             layer = layers[i]
             lname = layer['name']
