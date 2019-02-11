@@ -5,16 +5,16 @@ input_dim: 3
 input_dim: 1025
 input_dim: 2049
 
-layer {
-  name: "data_sub1"
-  type: "Scale"
-  bottom: "data"
-  top: "data_sub1"
-}
+# layer {
+#   name: "data_sub1"
+#   type: "Scale"
+#   bottom: "data"
+#   top: "data_sub1"
+# }
 layer {
   name: "data_sub2"
   type: "Interp"
-  bottom: "data_sub1"
+  bottom: "data"
   top: "data_sub2"
   interp_param {
     shrink_factor: 2

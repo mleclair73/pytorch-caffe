@@ -12,13 +12,11 @@ from collections import OrderedDict
 from prototxt import *
 import caffe
 import caffe.proto.caffe_pb2 as caffe_pb2
-# from torch.nn import SpatialCrossMapLRN as SpatialCrossMapLRNOld
 from itertools import product as product
 from detection import Detection, MultiBoxLoss
 
 SUPPORTED_LAYERS = ['Data', 'AnnotatedData', 'Pooling', 'Eltwise', 'ReLU', 
                     'Permute', 'Flatten', 'Slice', 'Concat', 'Softmax', 'SoftmaxWithLoss', 
-                    # 'LRN',
                     'Dropout', 'Reshape', 'PriorBox', 'DetectionOutput','Interp']
 
 class CaffeData(nn.Module):
@@ -209,7 +207,6 @@ class SoftmaxWithLoss(nn.CrossEntropyLoss):
         targets = targets.long()
         return nn.CrossEntropyLoss.forward(self, input, targets)
 
-
 class Normalize(nn.Module):
     def __init__(self,n_channels, scale=1.0):
         super(Normalize,self).__init__()
@@ -242,41 +239,6 @@ class Flatten(nn.Module):
         for i in range(self.axis):
             left_size = x.size(i) * left_size
         return x.view(left_size, -1).contiguous()
-
-# # function interface, internal, do not use this one!!!
-# class LRNFunc(Function):
-#     def __init__(self, size, alpha=1e-4, beta=0.75, k=1):
-#         super(LRNFunc, self).__init__()
-#         self.size = size
-#         self.alpha = alpha
-#         self.beta = beta
-#         self.k = k
-
-#     def forward(self, input):
-#         self.save_for_backward(input)
-#         self.lrn = SpatialCrossMapLRNOld(self.size, self.alpha, self.beta, self.k)
-#         self.lrn.type(input.type())
-#         return self.lrn.forward(input)
-
-#     def backward(self, grad_output):
-#         input, = self.saved_tensors
-#         return self.lrn.backward(input, grad_output)
-
-
-# # use this one instead
-# class LRN(nn.Module):
-#     def __init__(self, size, alpha=1e-4, beta=0.75, k=1):
-#         super(LRN, self).__init__()
-#         self.size = size
-#         self.alpha = alpha
-#         self.beta = beta
-#         self.k = k
-
-#     def __repr__(self):
-#         return 'LRN(size=%d, alpha=%f, beta=%f, k=%d)' % (self.size, self.alpha, self.beta, self.k)
-
-#     def forward(self, input):
-#         return LRNFunc(self.size, self.alpha, self.beta, self.k)(input)
 
 class Reshape(nn.Module):
     def __init__(self, dims):
